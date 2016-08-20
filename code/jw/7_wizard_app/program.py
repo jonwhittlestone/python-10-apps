@@ -1,7 +1,7 @@
 import random
 
 import time
-from actors import Wizard, Creature
+from actors import Wizard, Creature, SmallAnimal, Dragon
 
 
 def print_header():
@@ -13,16 +13,16 @@ def print_header():
 
 def game_loop():
     creatures = [
-        # Creature('Toad',1),
-        Creature('Tiger', 10),
-        # Creature('Bat', 3),
-        # Creature('Dragon', 50),
+        SmallAnimal('Toad',1),
+        SmallAnimal('Tiger', 10),
+        SmallAnimal('Bat', 3),
+        Dragon('Dragon', 250, 100, True),
         Wizard('Evil Wizard', 1000)
     ]
 
     hero = Wizard('Gandalf', 75)
 
-    while True:
+    while True and len(creatures) > 0:
         print()
         active_creature = random.choice(creatures)
         print('A {} of level {} has appeared from a dark and foggy forest ...'
