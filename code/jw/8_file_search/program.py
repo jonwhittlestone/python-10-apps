@@ -27,19 +27,20 @@ def get_search_text_from_user():
 
 
 def search_file(filename, search_text):
-    matches = []
+    # matches = []
     with open(filename, 'r', encoding='utf-8') as fin:
         line_num = 0
         for line in fin:
             line_num += 1
             if line.lower().find(search_text) >= 0:
                 m = SearchResult(line=line_num, file=filename, text=line)
-                matches.append(m)
-    return matches
+                yield m
+
+    # return matches
 
 def search_folder(folder, text):
     # print("Would search {} for {}" . format(folder, text))
-    all_matches = []
+    # all_matches = []
 
     items = os.listdir(folder)
     for item in items:
@@ -49,24 +50,29 @@ def search_folder(folder, text):
             continue
 
         if os.path.isdir(full_item):
-            matches = search_folder(full_item, text)
-            all_matches.extend(matches)
+            # added construct in Python 3.3. Loop through a set and hand them back one at a time
+            # yield generator method means we only have a single line in
+            # memory at atime
+            yield from search_folder(full_item, text)
+            # all_matches.extend(matches)
         else:
-            matches = search_file(full_item, text)
-            all_matches.extend(matches)
+            yield from search_file(full_item, text)
+            # all_matches.extend(matches)
 
-    return all_matches
+    # return all_matches
 
 
 def show_results(matches):
-    print('Found {} matches ..' . format(len(matches)))
+    match_count = 0
     for m in matches:
         print("** ----   MATCH   --- **")
+        print()
         print('File: ' + m.file)
         print('Line #: {}' .format(m.line))
         print('Match: ' + m.text.strip())
         print()
-
+        match_count += 1
+    print('Found {} matches ..' . format(match_count))
 
 def main():
     print_header()
