@@ -48,22 +48,33 @@ def query_data(data):
 
     # average house price?
 
-    # This can be improved using list comprehensions, which can further be improved using generator expressions
+    # This can be improved using list comprehensions
+    # which can further be improved using generator expressions
 
-    prices = []
-    for pur in data:
-        prices.append(pur.price)
+    # prices = []
+    # for pur in data:
+    #     prices.append(pur.price)
+    prices = [
+        p.price             # project / or items
+        for p in data       # the set to process
+    ]
+
     ave_price = statistics.mean(prices)
     print('The average home price is ${:,}' . format(int(ave_price)))
 
     # average price of 2 bed houses
-    prices = []
-    for pur in data:
-        if pur.beds[0] == 2:
-            prices.append(pur.price)
+    two_bed_homes = [
+        p  # project / or items
+        for p in data  # the set to process
+        if p.beds[0] == 2
+    ]
 
-    ave_price = statistics.mean(prices)
-    print('The average home price for a 2 bed home is ${:,}'.format(int(ave_price)))
+    ave_price = statistics.mean([p.price for p in two_bed_homes])
+    ave_baths = statistics.mean([p.baths for p in two_bed_homes])
+
+    print('The average home price for a 2 bed home is ${:,}. The average number of baths is {}'.format(
+        int(ave_price), round(ave_baths)
+    ))
 
 
 
