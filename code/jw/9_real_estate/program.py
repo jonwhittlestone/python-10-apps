@@ -1,5 +1,6 @@
 import csv
 import os
+
 try:
     import statistics
 except:
@@ -20,7 +21,7 @@ def get_data_file():
 
 
 def load_file(filename):
-    #with open(filename, 'r', encoding='utf-8') as fin:
+    # with open(filename, 'r', encoding='utf-8') as fin:
     with open(filename, 'r') as fin:
         # Don't need to do this if we're using DictReader
         # header = fin.readline().strip()
@@ -36,15 +37,16 @@ def load_file(filename):
 
 
 def query_data(data):
-
     data.sort(key=lambda p: p.price)
     # most expensive house?
     high_purchase = data[-1]
-    print('The most expensive house is ${:,} with {} beds and {} baths' . format(high_purchase.price, high_purchase.beds, high_purchase.baths))
+    print('The most expensive house is ${:,} with {} beds and {} baths'.format(high_purchase.price, high_purchase.beds,
+                                                                               high_purchase.baths))
 
     # least expensive house?
     low_purchase = data[0]
-    print('The least expensive house is ${:,} with {} beds and {} baths' . format(low_purchase.price, low_purchase.beds, low_purchase.baths))
+    print('The least expensive house is ${:,} with {} beds and {} baths'.format(low_purchase.price, low_purchase.beds,
+                                                                                low_purchase.baths))
 
     # average house price?
 
@@ -55,27 +57,32 @@ def query_data(data):
     # for pur in data:
     #     prices.append(pur.price)
     prices = [
-        p.price             # project / or items
-        for p in data       # the set to process
-    ]
+        p.price  # project / or items
+        for p in data  # the set to process
+        ]
 
     ave_price = statistics.mean(prices)
-    print('The average home price is ${:,}' . format(int(ave_price)))
+    print('The average home price is ${:,}'.format(int(ave_price)))
 
     # average price of 2 bed houses
-    two_bed_homes = [
+    two_bed_homes = (
         p  # project / or items
         for p in data  # the set to process
-        if p.beds[0] == 2
-    ]
+        if announce(p, "Average 2-bedrooms, found {}".format(p.beds[0])) and
+        p.beds[0] == 2
+    )
 
-    ave_price = statistics.mean([p.price for p in two_bed_homes])
-    ave_baths = statistics.mean([p.baths for p in two_bed_homes])
+    ave_price = statistics.mean((p.price for p in two_bed_homes))
+    ave_baths = statistics.mean((p.baths for p in two_bed_homes))
 
     print('The average home price for a 2 bed home is ${:,}. The average number of baths is {}'.format(
         int(ave_price), round(ave_baths)
     ))
 
+
+def announce(item, msg):
+    print("Pulling item {} for {}".format(item, msg))
+    return item
 
 
 def main():
